@@ -49,7 +49,7 @@ readelf -A deps2.tree/usr/lib/lib2.so >> deps2.log 2>&1 || exit 6
 readelf -A deps2.tree/usr/lib/lib3.so >> deps2.log 2>&1 || exit 7
 readelf -A deps2.tree/usr/bin/bin1 >> deps2.log 2>&1 || exit 8
 LIBS="deps2.tree/usr/lib/lib1.so deps2.tree/usr/lib/lib2.so"
-LIBS="$LIBS deps2.tree/opt/lib/lib1.so"
+#LIBS="$LIBS deps2.tree/opt/lib/lib1.so"
 BINS=
 comparelibs >> deps2.log 2>&1 || exit 9
 exit 0

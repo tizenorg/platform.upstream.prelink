@@ -1,5 +1,8 @@
 #!/bin/bash
 . `dirname $0`/functions.sh
+
+#exit 77 # requires -fPIE
+
 check_one() {
   cnt=0
   log=$1

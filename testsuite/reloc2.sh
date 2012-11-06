@@ -2,8 +2,7 @@
 . `dirname $0`/functions.sh
 SHFLAGS=
 case "`uname -m`" in
-  ia64|ppc*|x86_64|mips*|arm*) SHFLAGS=-fpic;; # Does not support non-pic shared libs
-  s390*) if file reloc1lib1.so | grep -q 64-bit; then SHFLAGS=-fpic; fi;;
+  ia64|ppc*|x86_64|mips*|s390*) SHFLAGS=-fpic;; # Does not support non-pic shared libs
 esac
 # Disable this test under SELinux if textrel
 if test -z "$SHFLAGS" -a -x /usr/sbin/getenforce; then
