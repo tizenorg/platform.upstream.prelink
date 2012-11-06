@@ -1,0 +1,76 @@
+diff -ru src.orig/conflict.c src/conflict.c
+--- src.orig/conflict.c	2002-12-13 00:44:21.000000000 +0100
++++ src/conflict.c	2003-01-07 12:53:31.000000000 +0100
+@@ -449,7 +449,7 @@
+   for (i = 1; i < ndeps; ++i)
+     {
+       ent = info->ent->depends[i - 1];
+-      if ((dso = open_dso (ent->filename)) == NULL)
++      if ((dso = open_dso (ent->canon_filename)) == NULL)
+ 	goto error_out;
+       info->dsos[i] = dso;
+       /* Now check that the DSO matches what we recorded about it.  */
+@@ -623,8 +623,8 @@
+ 		  && dso->phdr[k].p_vaddr + dso->phdr[k].p_memsz
+ 		     > info->conflict_rela[j].r_offset)
+ 		{
+-		  error (0, 0, "%s: Cannot prelink against non-PIC shared library %s",
+-			 info->dso->filename, dso->filename);
++		  error (0, 0, "%s: shared library %s appears possibly non-PIC and contains conflicts. Symbol offset: %lx",
++			info->dso->filename, dso->filename, (long)info->conflict_rela[j].r_offset);
+ 		  goto error_out;
+ 		}
+ 	}
+--- src.orig/gather.c	2002-12-03 19:55:59.000000000 +0100
++++ src/gather.c	2003-01-07 12:53:31.000000000 +0100
+@@ -369,7 +369,7 @@
+   DSO *dso;
+ 
+   ent->type = ET_BAD;
+-  dso = open_dso (ent->filename);
++  dso = open_dso (ent->canon_filename);
+   if (dso == NULL)
+     return 1;
+ 
+Nur in src: gather.c.orig.
+diff -ru src.orig/layout.c src/layout.c
+--- src.orig/layout.c	2002-12-03 18:42:31.000000000 +0100
++++ src/layout.c	2003-01-07 12:59:39.000000000 +0100
+@@ -535,7 +535,8 @@
+ 		< ((deps[j - 1]->end + max_page_size - 1)
+ 		   & ~(max_page_size - 1))
+ 		&& (deps[j]->type == ET_DYN || deps[j - 1]->type == ET_DYN))
+-	      abort ();
++		error(EXIT_FAILURE, 0, "The sorted library entries for %s and %s do overlap", 
++		      deps[j-1]->canon_filename, deps[j]->canon_filename);
+ 	}
+ #endif
+     }
+--- src.orig/space.c	2003-02-25 12:01:19.000000000 +0100
++++ src/space.c	2003-02-25 16:46:42.000000000 +0100
+@@ -338,6 +338,8 @@
+       shdr[j] = *add;
+       shdr[j].sh_addr = (shdr[j - 1].sh_addr + shdr[j - 1].sh_size
+ 			 + add->sh_addralign - 1) & ~(add->sh_addralign - 1);
++      if (shdr[j].sh_addr < phdr[i].p_vaddr)
++	shdr[j].sh_addr = phdr[i].p_vaddr;
+       shdr[j].sh_offset = (shdr[j].sh_addr - phdr[i].p_vaddr)
+ 			  + phdr[i].p_offset;
+       phdr[i].p_filesz = shdr[j].sh_addr + add->sh_size - phdr[i].p_vaddr;
+
+--- src/dso.c.orig	2003-06-30 10:51:51.000000000 +0000
++++ src/dso.c	2003-07-29 07:09:25.000000000 +0000
+@@ -191,8 +191,11 @@
+ 	      || RELOCATE_SCN (dso->shdr[last].sh_flags)
+ 	      || RELOCATE_SCN (dso->shdr[i].sh_flags))
+ 	    {
+-	      error (0, 0, "%s: section file offsets not monotonically increasing",
+-		     dso->filename);
++	      error (0, 0, "%s: section file offsets not monotonically increasing (%s before %s)",
++                     dso->filename,
++                     strptr (dso, dso->ehdr.e_shstrndx, dso->shdr[i-1].sh_name),
++                     strptr (dso, dso->ehdr.e_shstrndx, dso->shdr[i].sh_name));
++
+ 	      return 1;
+ 	    }
+ 	}
