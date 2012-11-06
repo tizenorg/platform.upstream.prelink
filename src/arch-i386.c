@@ -146,9 +146,11 @@ i386_prelink_rel (struct prelink_info *info, GElf_Rel *rel, GElf_Addr reladdr)
 	return 2;
       }
     case R_386_PC32:
-      error (0, 0, "%s: R_386_PC32 relocs should not be present in prelinked REL sections",
-	     dso->filename);
-      return 1;
+      if (!dry_run)
+         error (0, 0, "%s: R_386_PC32 relocs should not be present in prelinked REL sections",
+  	       dso->filename);
+      return !dry_run;
+
     case R_386_TLS_DTPOFF32:
       write_le32 (dso, rel->r_offset, value);
       break;
@@ -405,9 +407,10 @@ i386_prelink_conflict_rel (DSO *dso, struct prelink_info *info, GElf_Rel *rel,
       break;
     case R_386_32:
     case R_386_PC32:
-      error (0, 0, "%s: R_386_%s32 relocs should not be present in prelinked REL sections",
-	     dso->filename, GELF_R_TYPE (rel->r_info) == R_386_32 ? "" : "PC");
-      return 1;
+      if (!dry_run)
+        error (0, 0, "%s: R_386_%s32 relocs should not be present in prelinked REL sections",
+	       dso->filename, GELF_R_TYPE (rel->r_info) == R_386_32 ? "" : "PC");
+      return !dry_run;
     case R_386_TLS_DTPMOD32:
     case R_386_TLS_DTPOFF32:
     case R_386_TLS_TPOFF32:

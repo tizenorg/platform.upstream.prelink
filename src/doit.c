@@ -121,10 +121,6 @@ prelink_ent (struct prelink_entry *ent)
       goto error_out;
     }
 
-  if (dry_run)
-    close_dso (dso);
-  else
-    {
       if (prelink_prepare (dso))
 	goto make_unprelinkable;
       if (ent->type == ET_DYN && relocate_dso (dso, ent->base))
@@ -136,7 +132,10 @@ prelink_ent (struct prelink_entry *ent)
 	  dso = NULL;
 	  goto error_out;
 	}
-    }
+  
+  if (dry_run)
+     close_dso (dso);
+ 
   ent->done = 2;
   ent->flags |= PCF_PRELINKED;
 
