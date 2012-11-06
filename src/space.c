@@ -351,6 +351,8 @@ find_readonly_space (DSO *dso, GElf_Shdr *add, GElf_Ehdr *ehdr,
       shdr[j] = *add;
       shdr[j].sh_addr = (shdr[j - 1].sh_addr + shdr[j - 1].sh_size
 			 + add->sh_addralign - 1) & ~(add->sh_addralign - 1);
+      if (shdr[j].sh_addr < phdr[i].p_vaddr)
+	shdr[j].sh_addr = phdr[i].p_vaddr;
       shdr[j].sh_offset = (shdr[j].sh_addr - phdr[i].p_vaddr)
 			  + phdr[i].p_offset;
       phdr[i].p_filesz = shdr[j].sh_addr + add->sh_size - phdr[i].p_vaddr;

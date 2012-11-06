@@ -214,8 +214,11 @@ check_dso (DSO *dso)
 	      || RELOCATE_SCN (dso->shdr[last].sh_flags)
 	      || RELOCATE_SCN (dso->shdr[i].sh_flags))
 	    {
-	      error (0, 0, "%s: section file offsets not monotonically increasing",
-		     dso->filename);
+	      error (0, 0, "%s: section file offsets not monotonically increasing (%s before %s)",
+                     dso->filename,
+                     strptr (dso, dso->ehdr.e_shstrndx, dso->shdr[i-1].sh_name),
+                     strptr (dso, dso->ehdr.e_shstrndx, dso->shdr[i].sh_name));
+
 	      return 1;
 	    }
 	}

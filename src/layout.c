@@ -642,7 +642,8 @@ not_found:
 		< ((deps[j - 1]->end + max_page_size - 1)
 		   & ~(max_page_size - 1))
 		&& (deps[j]->type == ET_DYN || deps[j - 1]->type == ET_DYN))
-	      abort ();
+		error(EXIT_FAILURE, 0, "The sorted library entries for %s and %s do overlap", 
+		      deps[j-1]->canon_filename, deps[j]->canon_filename);
 	}
 #endif
     }
