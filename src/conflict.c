@@ -461,9 +461,9 @@ prelink_build_conflicts (struct prelink_info *info)
 	goto error_out;
       info->dsos[i] = dso;
       /* Now check that the DSO matches what we recorded about it.  */
-      if (ent->timestamp != dso->info_DT_GNU_PRELINKED
+      if (!dry_run && (ent->timestamp != dso->info_DT_GNU_PRELINKED
 	  || ent->checksum != dso->info_DT_CHECKSUM
-	  || ent->base != dso->base)
+	  || ent->base != dso->base))
 	{
 	  error (0, 0, "%s: Library %s has changed since it has been prelinked",
 		 info->dso->filename, ent->filename);
@@ -772,6 +772,7 @@ prelink_build_conflicts (struct prelink_info *info)
 				   - info->dynbss_base, cr.rela[i].r_addend,
 				   cr.rela[i].r_offset);
 
+       if (!dry_run) {
 	  switch (j)
 	    {
 	    case 1:
@@ -785,6 +786,7 @@ prelink_build_conflicts (struct prelink_info *info)
 		     (long long) (cr.rela[i].r_offset + cr.rela[i].r_addend));
 	      goto error_out;
 	    }
+	}
 	}
     }
 

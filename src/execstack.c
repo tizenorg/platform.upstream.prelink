@@ -31,6 +31,7 @@
 
 int set;
 int execflag;
+int dry_run = 0; // for arch-i386
 
 const char *argp_program_version = "execstack 1.0";
 
