@@ -487,7 +487,7 @@ gather_lib (struct prelink_entry *ent)
   DSO *dso;
 
   ent->type = ET_BAD;
-  dso = open_dso (ent->filename);
+  dso = open_dso (ent->canon_filename);
   if (dso == NULL)
     return 1;
 

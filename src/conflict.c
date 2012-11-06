@@ -457,7 +457,7 @@ prelink_build_conflicts (struct prelink_info *info)
   for (i = 1; i < ndeps; ++i)
     {
       ent = info->ent->depends[i - 1];
-      if ((dso = open_dso (ent->filename)) == NULL)
+      if ((dso = open_dso (ent->canon_filename)) == NULL)
 	goto error_out;
       info->dsos[i] = dso;
       /* Now check that the DSO matches what we recorded about it.  */
@@ -623,8 +623,8 @@ prelink_build_conflicts (struct prelink_info *info)
 		  && dso->phdr[k].p_vaddr + dso->phdr[k].p_memsz
 		     > info->conflict_rela[j].r_offset)
 		{
-		  error (0, 0, "%s: Cannot prelink against non-PIC shared library %s",
-			 info->dso->filename, dso->filename);
+		  error (0, 0, "%s: shared library %s appears possibly non-PIC and contains conflicts. Symbol offset: %lx",
+			info->dso->filename, dso->filename, (long)info->conflict_rela[j].r_offset);
 		  goto error_out;
 		}
 	}
