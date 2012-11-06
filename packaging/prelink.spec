@@ -10,11 +10,6 @@ Release:        0
 Url:            http://people.redhat.com/jakub/prelink/
 Source:         http://people.redhat.com/jakub/prelink/%name-%version.tar.bz2
 Source2:        %name.conf
-Patch0:         %name-make_it_cool.diff
-Patch3:         %name-tests.diff
-Patch4:         %name-make-dry-run-verbose.diff
-Patch5:         fix-copydtneeded.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 # It does not work at all on ia64, so let's listen upstream supported
 # architectures
 ExclusiveArch:  %{ix86} alpha sparc sparc64 s390 s390x x86_64 ppc ppc64
@@ -30,10 +25,6 @@ will no longer work.
 
 %prep
 %setup -q -n prelink
-%patch0 -p0
-%patch3 -p0
-%patch4 -p0
-%patch5 -p1
 
 %build
 # This package failed when testing with -Wl,-as-needed being default.
