@@ -60,6 +60,7 @@ EOF
 %docs_package
 
 %files
+%license COPYING
 %defattr(-,root,root)
 %dir /var/lib/prelink
 %dir /etc/rpm
