@@ -10,6 +10,7 @@ Release:        0
 Url:            http://people.redhat.com/jakub/prelink/
 Source:         http://people.redhat.com/jakub/prelink/%name-%version.tar.bz2
 Source2:        %name.conf
+Source1001: 	prelink.manifest
 # It does not work at all on ia64, so let's listen upstream supported
 # architectures
 ExclusiveArch:  %{ix86} alpha sparc sparc64 s390 s390x x86_64 ppc ppc64
@@ -25,6 +26,7 @@ will no longer work.
 
 %prep
 %setup -q -n prelink
+cp %{SOURCE1001} .
 
 %build
 # This package failed when testing with -Wl,-as-needed being default.
@@ -60,6 +62,7 @@ EOF
 %docs_package
 
 %files
+%manifest %{name}.manifest
 %license COPYING
 %defattr(-,root,root)
 %dir /var/lib/prelink
