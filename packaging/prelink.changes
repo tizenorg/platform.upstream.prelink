@@ -1,3 +1,7 @@
+* Tue Sep 24 2013 Anas Nashif <anas.nashif@intel.com> accepted/tizen/20130913.012759@90eda79
+- make it build for ARM
+- resetting manifest requested domain to floor
+
 * Sat May 11 2013 Anas Nashif <anas.nashif@intel.com> submit/tizen/20130509.183501@4dcd522
 - Set license using %license
 
