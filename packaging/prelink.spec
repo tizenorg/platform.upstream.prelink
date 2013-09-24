@@ -10,9 +10,6 @@ Release:        0
 Url:            http://people.redhat.com/jakub/prelink/
 Source:         http://people.redhat.com/jakub/prelink/%name-%version.tar.bz2
 Source2:        %name.conf
-# It does not work at all on ia64, so let's listen upstream supported
-# architectures
-ExclusiveArch:  %{ix86} alpha sparc sparc64 s390 s390x x86_64 ppc ppc64
 
 %description
 The prelink program is a utility that modifies shared libraries and
