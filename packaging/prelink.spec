@@ -34,7 +34,7 @@ export -n MALLOC_PERTURB_
 unset MALLOC_PERTURB_
 
 CFLAGS="$RPM_OPT_FLAGS" \
-./configure --prefix=/usr --mandir=%{_mandir} || cat config.log
+%configure --prefix=/usr --mandir=%{_mandir} || cat config.log
 make %{?jobs:-j%jobs}
 
 %check
