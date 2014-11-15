@@ -1,3 +1,7 @@
+* Sun Nov 16 2014 Chanho Park <chanho61.park@samsung.com> upstream/20130503-13-g3d555ac
+- Imported Upstream version 20130503
+- disable unprel1
+
 * Tue Sep 24 2013 Anas Nashif <anas.nashif@intel.com> accepted/tizen/20130913.012759@90eda79
 - make it build for ARM
 - resetting manifest requested domain to floor

@@ -5,7 +5,7 @@ BuildRequires:  libelf0-devel
 Summary:        An ELF Prelinking Utility
 License:        GPL-2.0+
 Group:          System/Base
-Version:        20111012
+Version:        20130503
 Release:        0
 Url:            http://people.redhat.com/jakub/prelink/
 Source:         http://people.redhat.com/jakub/prelink/%name-%version.tar.bz2
