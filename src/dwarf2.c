@@ -1,4 +1,5 @@
-/* Copyright (C) 2001, 2002, 2003, 2005, 2006, 2009, 2010, 2011 Red Hat, Inc.
+/* Copyright (C) 2001, 2002, 2003, 2005, 2006, 2009, 2010, 2011, 2012
+   Red Hat, Inc.
    Written by Jakub Jelinek <jakub@redhat.com>, 2001.
 
    This program is free software; you can redistribute it and/or modify
@@ -162,6 +163,7 @@ static struct
 #define DEBUG_FRAME	9
 #define DEBUG_RANGES	10
 #define DEBUG_TYPES	11
+#define DEBUG_MACRO	12
     { ".debug_info", NULL, 0, 0 },
     { ".debug_abbrev", NULL, 0, 0 },
     { ".debug_line", NULL, 0, 0 },
@@ -174,6 +176,7 @@ static struct
     { ".debug_frame", NULL, 0, 0 },
     { ".debug_ranges", NULL, 0, 0 },
     { ".debug_types", NULL, 0, 0 },
+    { ".debug_macro", NULL, 0, 0 },
     { NULL, NULL, 0 }
   };
 
@@ -274,7 +277,10 @@ no_memory:
 	    }
 	  form = read_uleb128 (ptr);
 	  if (form == 2
-	      || (form > DW_FORM_flag_present && form != DW_FORM_ref_sig8))
+	      || (form > DW_FORM_flag_present
+		  && form != DW_FORM_ref_sig8
+		  && form != DW_FORM_GNU_ref_alt
+		  && form != DW_FORM_GNU_strp_alt))
 	    {
 	      error (0, 0, "%s: Unknown DWARF DW_FORM_%d", dso->filename, form);
 	      htab_delete (h);
@@ -586,10 +592,16 @@ adjust_attributes (DSO *dso, unsigned char *ptr, struct abbrev_tag *t,
 	{
 	  switch (t->attr[i].attr)
 	    {
+	    case DW_AT_data_member_location:
+	      /* In DWARF4+ DW_AT_data_member_location
+		 with DW_FORM_data[48] is just very high
+		 constant, rather than loclistptr.  */
+	      if (cu->cu_version >= 4 && form != DW_FORM_sec_offset)
+		break;
+	      /* FALLTHRU */
 	    case DW_AT_location:
 	    case DW_AT_string_length:
 	    case DW_AT_return_addr:
-	    case DW_AT_data_member_location:
 	    case DW_AT_frame_base:
 	    case DW_AT_segment:
 	    case DW_AT_static_link:
@@ -653,6 +665,7 @@ adjust_attributes (DSO *dso, unsigned char *ptr, struct abbrev_tag *t,
 	      ptr += 2;
 	      break;
 	    case DW_FORM_ref4:
+	    case DW_FORM_GNU_ref_alt:
 	    case DW_FORM_data4:
 	    case DW_FORM_sec_offset:
 	      ptr += 4;
@@ -674,6 +687,7 @@ adjust_attributes (DSO *dso, unsigned char *ptr, struct abbrev_tag *t,
 		ptr += 4;
 	      break;
 	    case DW_FORM_strp:
+	    case DW_FORM_GNU_strp_alt:
 	      ptr += 4;
 	      break;
 	    case DW_FORM_string:

@@ -1,3 +1,94 @@
+2013-05-03  Jakub Jelinek  <jakub@redhat.com>
+
+	* src/cache.c (prelink_save_cache_check): For ET_CACHE_DYN
+	or ET_UNPRELINKABLE dependencies, call prelink_save_cache_check
+	recursively.
+	* testsuite/Makefile.am (TESTS): Add unprel1.sh.
+	* testsuite/Makefile.in: Regenerated.
+	* testsuite/unprel1.sh: New test.
+	* testsuite/unprel1.c: New file.
+	* testsuite/unprel1lib1.c: New file.
+	* testsuite/unprel1lib2.c: New file.
+
+	* src/prelink.h (R_390_IRELATIVE): Define if not defined.
+
+2013-04-25  Jakub Jelinek  <jakub@redhat.com>
+
+	* src/arch-s390.c (s390_adjust_rela, s390_prelink_rela,
+	s390_apply_conflict_rela, s390_prelink_conflict_rela,
+	s390_undo_prelink_rela): Handle R_390_IRELATIVE.
+	* src/arch-s390x.c (s390x_adjust_rela, s390x_prelink_rela,
+	s390x_apply_conflict_rela, s390x_prelink_conflict_rela,
+	s390x_undo_prelink_rela, s390x_reloc_size): Likewise.
+
+2013-04-18  Jakub Jelinek  <jakub@redhat.com>
+
+	* testsuite/reloc4.sh: Add libraries to link lines to make
+	testsuite work both with --no-add-needed and with --add-needed,
+	including latest ld.bfd.
+	* testsuite/reloc5.sh: Likewise.
+	* testsuite/reloc8.sh: Likewise.
+	* testsuite/reloc9.sh: Likewise.
+
+2013-04-17  Jakub Jelinek  <jakub@redhat.com>
+
+	* testsuite/ifunc.h (IFUNC_DECL): Fix up .size on ppc64.
+	* testsuite/cxx1.sh: Add libraries to link lines to make
+	testsuite work both with --no-add-needed and with --add-needed,
+	including latest ld.bfd.
+	* testsuite/cxx2.sh: Likewise.
+	* testsuite/cxx3.sh: Likewise.
+	* testsuite/deps1.sh: Likewise.
+	* testsuite/deps2.sh: Likewise.
+	* testsuite/ifunc1.sh: Likewise.
+	* testsuite/ifunc2.sh: Likewise.
+	* testsuite/ifunc3.sh: Likewise.
+	* testsuite/quick1.sh: Likewise.
+	* testsuite/quick2.sh: Likewise.
+	* testsuite/quick3.sh: Likewise.
+	* testsuite/reloc1.sh: Likewise.
+	* testsuite/reloc10.sh: Likewise.
+	* testsuite/reloc11.sh: Likewise.
+	* testsuite/reloc3.sh: Likewise.
+	* testsuite/reloc6.sh: Likewise.
+	* testsuite/reloc7.sh: Likewise.
+	* testsuite/shuffle1.sh: Likewise.
+	* testsuite/shuffle2.sh: Likewise.
+	* testsuite/shuffle3.sh: Likewise.
+	* testsuite/shuffle4.sh: Likewise.
+	* testsuite/shuffle5.sh: Likewise.
+	* testsuite/shuffle6.sh: Likewise.
+	* testsuite/shuffle7.sh: Likewise.
+	* testsuite/shuffle8.sh: Likewise.
+	* testsuite/shuffle9.sh: Likewise.
+	* testsuite/tls1.sh: Likewise.
+	* testsuite/tls2.sh: Likewise.
+	* testsuite/tls3.sh: Likewise.
+	* testsuite/tls4.sh: Likewise.
+	* testsuite/tls5.sh: Likewise.
+	* testsuite/tls6.sh: Likewise.
+	* testsuite/undo1.sh: Likewise.
+
+2012-06-28  Jakub Jelinek  <jakub@redhat.com>
+
+	* src/get.c (is_ldso_soname): Add arm dynamic linker SONAMEs.
+
+	* src/dwarf2.h (DW_FORM_GNU_ref_alt,
+	DW_FORM_GNU_strp_alt): Define.
+	* src/dwarf2.c (read_abbrev): Allow those forms.
+	(adjust_attributes): Handle them.
+
+2012-04-10  Jakub Jelinek  <jakub@redhat.com>
+
+	* src/dwarf2.c (DEBUG_MACRO): Define.
+	(debug_sections): Add .debug_macro entry.
+
+2012-04-02  Jakub Jelinek  <jakub@redhat.com>
+
+	* src/dwarf2.c (adjust_attributes): For DWARF4+ treat
+	DW_AT_data_member_location with DW_FORM_data[48] as
+	large constant instead of loclistptr.
+
 2011-10-12  Jakub Jelinek  <jakub@redhat.com>
 
 	* src/main.c (layout_page_size): New variable.
